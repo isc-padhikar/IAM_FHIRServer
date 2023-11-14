@@ -4,7 +4,36 @@ zn "%SYS"
 Do ##class(Security.Users).UnExpireUserPasswords("*")
 set $namespace="%SYS", name="DefaultSSL" do:'##class(Security.SSLConfigs).Exists(name) ##class(Security.SSLConfigs).Create(name) set url="https://pm.community.intersystems.com/packages/zpm/latest/installer" Do ##class(%Net.URLParser).Parse(url,.comp) set ht = ##class(%Net.HttpRequest).%New(), ht.Server = comp("host"), ht.Port = 443, ht.Https=1, ht.SSLConfiguration=name, st=ht.Get(comp("path")) quit:'st $System.Status.GetErrorText(st) set xml=##class(%File).TempFilename("xml"), tFile = ##class(%Stream.FileBinary).%New(), tFile.Filename = xml do tFile.CopyFromAndSave(ht.HttpResponse.Data) do ht.%Close(), $system.OBJ.Load(xml,"ck") do ##class(%File).Delete(xml)
 
+//init FHIR Server
+zn "HSLIB"
+set namespace="FHIRSERVER"
+
+Set appKey = "/csp/healthshare/fhirserver/fhir/r4"
+Set strategyClass = "HS.FHIRServer.Storage.Json.InteractionsStrategy"
+set metadataPackages = $lb("hl7.fhir.r4.core@4.0.1")
+set importdir="/opt/irisapp/src"
+
+//Install a Foundation namespace and change to it
+Do ##class(HS.Util.Installer.Foundation).Install(namespace)
+zn namespace
+
+// Install elements that are required for a FHIR-enabled namespace
+Do ##class(HS.FHIRServer.Installer).InstallNamespace()
+
+// Install an instance of a FHIR Service into the current namespace
+Do ##class(HS.FHIRServer.Installer).InstallInstance(appKey, strategyClass, metadataPackages)
+
+// Configure FHIR Service instance to accept unauthenticated requests
+set strategy = ##class(HS.FHIRServer.API.InteractionsStrategy).GetStrategyForEndpoint(appKey)
+set config = strategy.GetServiceConfigData()
+set config.DebugMode = 4
+do strategy.SaveServiceConfigData(config)
+
+zw ##class(HS.FHIRServer.Tools.DataLoader).SubmitResourceFiles("/opt/irisapp/fhirdata/", "FHIRSERVER", appKey)
+
 zn "USER"
+
+zpm "load /opt/irisbuild/ -v":1:1
 
 zpm 
 load /opt/irisapp/ -v
