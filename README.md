@@ -1,7 +1,6 @@
 InterSystems API Manager (IAM) is a core component of the InterSystems IRIS Data Platform, offering centralized API management with a strong emphasis on security. IAM simplifies the entire API lifecycle, from creation to retirement, and provides a developer portal for easy API discovery and integration. Access control features allow administrators to define precise permissions, and IAM seamlessly integrates with the IRIS Data Platform, enhancing data management and integration capabilities.
 
 Features of IAM include:
-
 API Gateway: Centralized API management and security hub.
 API Lifecycle Management: Complete lifecycle control from creation to retirement.
 Security: Authentication, authorization, and data encryption.
@@ -10,7 +9,7 @@ Developer Portal: API discovery portal with documentation and testing.
 Access Control: Granular control over API access and actions.
 Integration with InterSystems IRIS: Seamless integration with IRIS Data Platform.
 
-Use case: The use case in this report is Identity and Access Management.
+**Use case:** The use case in this report is Identity and Access Management.
 
 Authentication and authorization adhering to OAuth 2.0 standard, securing a FHIR server using IAM.
 
@@ -19,19 +18,18 @@ In this document, you will learn how to secure a FHIR Server with OAuth 2.0 usin
 Note: FHIR server only supports JWT tokens for OAuth 2.0 authentication, does not support opaque tokens.
 
 Instructions to run the demo locally:
-
-Run the following command in Command Prompt to clone the relevant repository:
+1. Run the following command in Command Prompt to clone the relevant repository:
 
 ```git clone https://github.com/isc-padhikar/IAM_FHIRServer```
 
-Go into the directory of newly clone repository and create a new directory and name it 'key'. And copy a iris.key file, which is the license for InterSystems IRIS for Health which supports API Management.
+2. Go into the directory of newly clone repository and create a new directory and name it 'key'. And copy a iris.key file, which is the license for InterSystems IRIS for Health which supports API Management.
 
-Then go back to Command Prompt and run the following commands one by one:
+3. Then go back to Command Prompt and run the following commands one by one:
 
 ```docker-compose build```
 ```docker-compose up```
 
-Go to ```localhost:8000``` which has IAM running.
+4. Go to ```localhost:8000``` which has IAM running.
 
 Using IAM, I can make a FHIR server available as a service like seen in the picture below:
 
@@ -39,7 +37,6 @@ Using IAM, I can make a FHIR server available as a service like seen in the pict
 Define a route that will be the proxy for the FHIR server (I have defined /fhir as the proxy) like in the picture below:
 
 And, define plugins that will handle the incoming requests to the FHIR server, authenticate and authorize access to the FHIR server. We should define the issuer of JWT token (the authorization server) and the public key that we obtain by decoding private key (please refer to the upcoming 'Authorization server' section for this part), in the JWT plugin under 'Credentials' section like in the following images:
-
 
 
 Following images show authentication using Auth0 server and authorization based JWT tokens via IAM.
@@ -51,13 +48,9 @@ Using the JWT token to access FHIR server via proxy route defined in IAM:
 Authorization server:
 
 An external authorization server is used and its Auth0. The instructions to set up an authorization server is given in the README of demo #1 (FHIROktaIntegration) mentioned in upcoming 'Demos used as reference' section.
-
 Endpoint to get JSON Web Key Set (JWKS): https://dev-bi2i05hvuzmk52dm.au.auth0.com/.well-known/jwks.json
-
 It provides us with a pair of keys for the authorization server that we've set up and that can be used to retrieve the private key using a decoding algorithm.
-
 We will use the private key in IAM to verify JWT token signatures.
-
 Best practice to retrieve public key from a JWKS is using a programming language. I used following code in Python:
 ```
 import base64
@@ -86,26 +79,23 @@ public_key_pem = public_key.public_bytes(
 )
 print(public_key_pem.decode('utf-8'))
 ```
-Demos used as reference:
-
-FHIROktaIntegration: https://openexchange.intersystems.com/package/FHIROktaIntegration
+**Demos used as reference:**
+1. FHIROktaIntegration: https://openexchange.intersystems.com/package/FHIROktaIntegration
 
 This demo shows how to configure OAuth 2.0 directly on InterSystems IRIS for Health and use that configuration for a FHIR server. Please follow the instructions it has to configure authorization server's details. However, the configurations looks like this in the management portal after done:
-
 
 It has a Angular app that authenticates with the authorization server, with a UI that displays FHIR resources after authorization.
  
 This demonstrate how OAuth2.0 can be configured within InterSystems IRIS for Health to secure a FHIR server.
 
-
-IAM Zero-to-Hero: https://openexchange.intersystems.com/package/iam-zero-to-hero
+2. IAM Zero-to-Hero: https://openexchange.intersystems.com/package/iam-zero-to-hero
 
 The demo constitutes of IAM, and IAM related training. I will be modifying this to have a FHIR server and using the instance of IAM in this demo to authentication with Auth0 authorization server and authorize access using JWT plugin.
 Unlike the previous demo, this demonstrated the use of IAM to expose a FHIR server endpoint and secure it by OAuth 2.0 standard using the plugins library that IAM offers.
 
 Changes made in this demo:
 
-I added a FHIR server in the instance of IRIS for Health in this demo. Please replace the code in iris.script file with this following code:
+i) I added a FHIR server in the instance of IRIS for Health in this demo. Please replace the code in iris.script file with this following code:
 ```
 ;do $System.OBJ.LoadDir("/opt/irisapp/src","ck",,1)
 
@@ -154,4 +144,4 @@ halt
 ```
 
 
-In docker-compose.yml file, update IAM's image to latest (containers.intersystems.com/intersystems/iam:3.2.1.0-4), because only IAM (Kong) versions form 3.1 support JSON draft-6, which is what FHIR specification provides.
+ii) In docker-compose.yml file, update IAM's image to latest (containers.intersystems.com/intersystems/iam:3.2.1.0-4), because only IAM (Kong) versions form 3.1 support JSON draft-6, which is what FHIR specification provides.
