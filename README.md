@@ -45,7 +45,7 @@ Getting a JWT token from authorization server:
 
 Using the JWT token to access FHIR server via proxy route defined in IAM:
 
-Authorization server:
+**Authorization server:**
 
 An external authorization server is used and its Auth0. The instructions to set up an authorization server is given in the README of demo #1 (FHIROktaIntegration) mentioned in upcoming 'Demos used as reference' section.
 Endpoint to get JSON Web Key Set (JWKS): https://dev-bi2i05hvuzmk52dm.au.auth0.com/.well-known/jwks.json
