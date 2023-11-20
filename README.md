@@ -1,13 +1,13 @@
 InterSystems API Manager (IAM) is a core component of the InterSystems IRIS Data Platform, offering centralized API management with a strong emphasis on security. IAM simplifies the entire API lifecycle, from creation to retirement, and provides a developer portal for easy API discovery and integration. Access control features allow administrators to define precise permissions, and IAM seamlessly integrates with the IRIS Data Platform, enhancing data management and integration capabilities.
 
 Features of IAM include:
-API Gateway: Centralized API management and security hub.
-API Lifecycle Management: Complete lifecycle control from creation to retirement.
-Security: Authentication, authorization, and data encryption.
-Monitoring and Analytics: Tools for usage monitoring and pattern analytics.
-Developer Portal: API discovery portal with documentation and testing.
-Access Control: Granular control over API access and actions.
-Integration with InterSystems IRIS: Seamless integration with IRIS Data Platform.
+- API Gateway: Centralized API management and security hub.
+- API Lifecycle Management: Complete lifecycle control from creation to retirement.
+- Security: Authentication, authorization, and data encryption.
+- Monitoring and Analytics: Tools for usage monitoring and pattern analytics.
+- Developer Portal: API discovery portal with documentation and testing.
+- Access Control: Granular control over API access and actions.
+- Integration with InterSystems IRIS: Seamless integration with IRIS Data Platform.
 
 **Use case:** The use case in this report is Identity and Access Management.
 
@@ -17,7 +17,7 @@ In this document, you will learn how to secure a FHIR Server with OAuth 2.0 usin
 
 Note: FHIR server only supports JWT tokens for OAuth 2.0 authentication, does not support opaque tokens.
 
-Instructions to run the demo locally:
+**Instructions to run the demo locally:**
 1. Run the following command in Command Prompt to clone the relevant repository:
 
 ```git clone https://github.com/isc-padhikar/IAM_FHIRServer```
@@ -29,28 +29,43 @@ Instructions to run the demo locally:
 ```docker-compose build```
 ```docker-compose up```
 
-4. Go to ```localhost:8000``` which has IAM running.
+4. Go to ```localhost:8002``` which has IAM running.
 
-Using IAM, I can make a FHIR server available as a service like seen in the picture below:
+5. Using IAM, I can make a FHIR server available as a service like seen in the picture below:
+   
+    ![image](https://github.com/isc-padhikar/IAM_FHIRServer/assets/98080918/58657645-1bcf-498f-8505-74fdd8fdf3c3)
 
+6. Define a route that will be the proxy for the FHIR server (I have defined /fhir as the proxy) like in the picture below:
+   
+    ![image](https://github.com/isc-padhikar/IAM_FHIRServer/assets/98080918/f55f571e-a313-4b6d-adbd-c51f2728b8ac)
 
-Define a route that will be the proxy for the FHIR server (I have defined /fhir as the proxy) like in the picture below:
+7. And, define plugins that will handle the incoming requests to the FHIR server, authenticate and authorize access to the FHIR server. We should define the issuer of JWT token (the authorization server) and the public key that we obtain by decoding private key (please refer to the upcoming 'Authorization server' section for this part), in the JWT plugin under 'Credentials' section like in the following images:
+   
+    ![image](https://github.com/isc-padhikar/IAM_FHIRServer/assets/98080918/fbcfb19c-ccdb-4b69-b692-066073365dd1)
 
-And, define plugins that will handle the incoming requests to the FHIR server, authenticate and authorize access to the FHIR server. We should define the issuer of JWT token (the authorization server) and the public key that we obtain by decoding private key (please refer to the upcoming 'Authorization server' section for this part), in the JWT plugin under 'Credentials' section like in the following images:
+   ![image](https://github.com/isc-padhikar/IAM_FHIRServer/assets/98080918/cb5ea7b8-2878-4d60-9293-ebf3f36e5f7a)
 
 
 Following images show authentication using Auth0 server and authorization based JWT tokens via IAM.
 
 Getting a JWT token from authorization server:
 
+![image](https://github.com/isc-padhikar/IAM_FHIRServer/assets/98080918/43d555eb-1ba2-4569-8c9e-523634e4dc7f)
+
 Using the JWT token to access FHIR server via proxy route defined in IAM:
+
+![image](https://github.com/isc-padhikar/IAM_FHIRServer/assets/98080918/8f4152f2-f195-4756-84bd-0be8895a5b36)
 
 **Authorization server:**
 
 An external authorization server is used and its Auth0. The instructions to set up an authorization server is given in the README of demo #1 (FHIROktaIntegration) mentioned in upcoming 'Demos used as reference' section.
+
 Endpoint to get JSON Web Key Set (JWKS): https://dev-bi2i05hvuzmk52dm.au.auth0.com/.well-known/jwks.json
+
 It provides us with a pair of keys for the authorization server that we've set up and that can be used to retrieve the private key using a decoding algorithm.
+
 We will use the private key in IAM to verify JWT token signatures.
+
 Best practice to retrieve public key from a JWKS is using a programming language. I used following code in Python:
 ```
 import base64
