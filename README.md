@@ -97,8 +97,7 @@ print(public_key_pem.decode('utf-8'))
 **Demos used as reference:**
 1. FHIROktaIntegration: https://openexchange.intersystems.com/package/FHIROktaIntegration
 
-This demo shows how to configure OAuth 2.0 directly on InterSystems IRIS for Health and use that configuration for a FHIR server. Please follow the instructions it has to configure authorization server's details. However, the configurations looks like this in the management portal after done:
-
+This demo shows how to configure OAuth 2.0 directly on InterSystems IRIS for Health and use that configuration for a FHIR server. Please follow the instructions it has to configure authorization server's details. 
 It has a Angular app that authenticates with the authorization server, with a UI that displays FHIR resources after authorization.
  
 This demonstrate how OAuth2.0 can be configured within InterSystems IRIS for Health to secure a FHIR server.
