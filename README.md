@@ -24,7 +24,7 @@ Note: FHIR server only supports JWT tokens for OAuth 2.0 authentication, does no
 
 2. Go into the directory of newly clone repository and create a new directory and name it 'key'. And copy a iris.key file, which is the license for InterSystems IRIS for Health which supports API Management. License keys can be downloaded from the following link: https://twiki.iscinternal.com/twiki/bin/view/ISC/LicenseKeys
 
-3. Then go back to Command Prompt and login to InterSystems Container Registry as we will require access to pull some images. In order to login, go to containers.intersystems.com and login with you InterSystems credentials and copy the command to login as shown in the following image and run it on Command Prompt:
+3. Then go back to Command Prompt and login to InterSystems Container Registry as we will require access to pull some images. In order to login, go to https://containers.intersystems.com and login with you InterSystems credentials and copy the command to login as shown in the following image and run it on Command Prompt:
 
    ![image](https://github.com/isc-padhikar/IAM_FHIRServer/assets/98080918/0af97651-dc8e-49a3-ae4d-2b6a80556472)
 
