@@ -24,22 +24,27 @@ Note: FHIR server only supports JWT tokens for OAuth 2.0 authentication, does no
 
 2. Go into the directory of newly clone repository and create a new directory and name it 'key'. And copy a iris.key file, which is the license for InterSystems IRIS for Health which supports API Management. License keys can be downloaded from the following link: https://twiki.iscinternal.com/twiki/bin/view/ISC/LicenseKeys
 
-3. Then go back to Command Prompt and run the following commands one by one:
+3. Then go back to Command Prompt and login to InterSystems Container Registry as we will require access to pull some images. In order to login, go to containers.intersystems.com and login with you InterSystems credentials and copy the command to login as shown in the following image and run it on Command Prompt:
+
+   ![image](https://github.com/isc-padhikar/IAM_FHIRServer/assets/98080918/0af97651-dc8e-49a3-ae4d-2b6a80556472)
+
+4. Run the following commands one by one:
 
 ```docker-compose build```
+
 ```docker-compose up```
 
-4. Go to ```localhost:8002``` which has IAM running.
+5. Go to ```localhost:8002``` which has IAM running.
 
-5. Using IAM, I can make a FHIR server available as a service like seen in the picture below:
+6. Using IAM, I can make a FHIR server available as a service like seen in the picture below:
    
     ![image](https://github.com/isc-padhikar/IAM_FHIRServer/assets/98080918/58657645-1bcf-498f-8505-74fdd8fdf3c3)
 
-6. Define a route that will be the proxy for the FHIR server (I have defined /fhir as the proxy) like in the picture below:
+7. Define a route that will be the proxy for the FHIR server (I have defined /fhir as the proxy) like in the picture below:
    
     ![image](https://github.com/isc-padhikar/IAM_FHIRServer/assets/98080918/f55f571e-a313-4b6d-adbd-c51f2728b8ac)
 
-7. And, define plugins that will handle the incoming requests to the FHIR server, authenticate and authorize access to the FHIR server. We should define the issuer of JWT token (the authorization server) and the public key that we obtain by decoding private key (please refer to the upcoming 'Authorization server' section for this part), in the JWT plugin under 'Credentials' section like in the following images:
+8. And, define plugins that will handle the incoming requests to the FHIR server, authenticate and authorize access to the FHIR server. We should define the issuer of JWT token (the authorization server) and the public key that we obtain by decoding private key (please refer to the upcoming 'Authorization server' section for this part), in the JWT plugin under 'Credentials' section like in the following images:
    
     ![image](https://github.com/isc-padhikar/IAM_FHIRServer/assets/98080918/fbcfb19c-ccdb-4b69-b692-066073365dd1)
 
