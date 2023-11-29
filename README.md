@@ -36,15 +36,16 @@ Note: FHIR server only supports JWT tokens for OAuth 2.0 authentication, does no
 
 5. Go to ```localhost:8002``` which has IAM running.
 
-6. Using IAM, I can make a FHIR server available as a service like seen in the picture below:
+6. Please refer to sections 4, 5 and 6 of the Zero-to-Hero repository's README (https://github.com/grongierisc/kong-ee-training#4-first-serviceroute), to get familiar with routes, services etc. in IAM and set those up.
+7. Using IAM, I can make a FHIR server available as a service like seen in the picture below:
    
     ![image](https://github.com/isc-padhikar/IAM_FHIRServer/assets/98080918/58657645-1bcf-498f-8505-74fdd8fdf3c3)
 
-7. Define a route that will be the proxy for the FHIR server (I have defined /fhir as the proxy) like in the picture below:
+8. Define a route that will be the proxy for the FHIR server (I have defined /fhir as the proxy) like in the picture below:
    
     ![image](https://github.com/isc-padhikar/IAM_FHIRServer/assets/98080918/f55f571e-a313-4b6d-adbd-c51f2728b8ac)
 
-8. And, define plugins that will handle the incoming requests to the FHIR server, authenticate and authorize access to the FHIR server. We should define the issuer of JWT token (the authorization server) and the public key that we obtain by decoding private key (please refer to the upcoming 'Authorization server' section for this part), in the JWT plugin under 'Credentials' section like in the following images:
+9. And, define plugins that will handle the incoming requests to the FHIR server, authenticate and authorize access to the FHIR server. We should define the issuer of JWT token (the authorization server) and the public key that we obtain by decoding private key (please refer to the upcoming 'Authorization server' section for this part), in the JWT plugin under 'Credentials' section like in the following images:
    
     ![image](https://github.com/isc-padhikar/IAM_FHIRServer/assets/98080918/fbcfb19c-ccdb-4b69-b692-066073365dd1)
 
