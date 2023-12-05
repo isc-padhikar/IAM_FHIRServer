@@ -36,7 +36,10 @@ Note: FHIR server only supports JWT tokens for OAuth 2.0 authentication, does no
 
 5. Go to ```localhost:8002``` which has IAM running.
 
-6. Please refer to sections 4, 5 and 6 of the Zero-to-Hero repository's README (https://github.com/grongierisc/kong-ee-training#4-first-serviceroute), to get familiar with routes, services etc. in IAM and set those up.
+6. Please refer to sections 4, 5 and 6 of the Zero-to-Hero repository's README (https://github.com/grongierisc/kong-ee-training#4-first-serviceroute), to get familiar with routes, services etc. in IAM and set those up. A new service, route and consumer can be created by clicking on 'New Service', 'New Route' and 'New Consumer' respectively.
+
+   ![image](https://github.com/isc-padhikar/IAM_FHIRServer/assets/98080918/766c0477-bc83-4153-b761-4e249b874120)
+
 7. Using IAM, I can make a FHIR server available as a service like seen in the picture below:
    
     ![image](https://github.com/isc-padhikar/IAM_FHIRServer/assets/98080918/58657645-1bcf-498f-8505-74fdd8fdf3c3)
